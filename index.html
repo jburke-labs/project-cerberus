@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Cerberus // Hardware Registry</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Chakra+Petch:wght@300;400;500;600;700&family=Oxanium:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg0: #050709;
+  --bg1: #090d12;
+  --bg2: #0e1420;
+  --bg3: #131b26;
+  --cyan: #00e5ff;
+  --cyan2: #00b8cc;
+  --green: #00ff88;
+  --green2: #00cc6a;
+  --amber: #ffaa00;
+  --amber2: #cc8800;
+  --blue: #4d9fff;
+  --blue2: #2d7fdf;
+  --white: #e8f4ff;
+  --dim: #4a6070;
+  --mid: #7a9ab0;
+  --border: rgba(0,229,255,0.1);
+  --border2: rgba(0,229,255,0.25);
+  --font-mono: 'Share Tech Mono', monospace;
+  --font-body: 'Chakra Petch', sans-serif;
+  --font-display: 'Oxanium', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg0);
+  color: var(--white);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: crosshair;
+}
+
+.bg-grid {
+  position: fixed; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  animation: gridDrift 20s linear infinite;
+}
+@keyframes gridDrift {
+  0% { background-position: 0 0; }
+  100% { background-position: 48px 48px; }
+}
+
+.bg-vignette {
+  position: fixed; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(5,7,9,0.85) 100%);
+  pointer-events: none;
+}
+
+.bg-scanlines {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 3px,
+    rgba(0,0,0,0.12) 3px, rgba(0,0,0,0.12) 4px
+  );
+}
+
+.bg-corner {
+  position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none;
+  width: 400px; height: 400px;
+  background: radial-gradient(ellipse at top left, rgba(0,229,255,0.06) 0%, transparent 65%);
+}
+
+.page {
+  position: relative; z-index: 1;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 28px 100px;
+}
+
+/* ── HERO ── */
+.hero {
+  padding: 70px 0 56px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 40px;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--cyan);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 32px; height: 1px;
+  background: var(--cyan);
+  box-shadow: 0 0 6px var(--cyan);
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(3rem, 8vw, 6rem);
+  line-height: 0.9;
+  letter-spacing: -1px;
+  color: var(--white);
+  text-transform: uppercase;
+}
+.hero-title .accent {
+  display: block;
+  color: var(--cyan);
+  text-shadow: 0 0 30px rgba(0,229,255,0.5), 0 0 60px rgba(0,229,255,0.2);
+}
+
+.hero-subtitle {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--mid);
+  letter-spacing: 3px;
+  margin-top: 16px;
+  text-transform: uppercase;
+}
+
+.hero-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.stat-box {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-right: 2px solid var(--cyan);
+  padding: 12px 20px 12px 16px;
+  text-align: right;
+  min-width: 140px;
+}
+.stat-val {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--cyan);
+  line-height: 1;
+  text-shadow: 0 0 20px rgba(0,229,255,0.4);
+}
+.stat-lbl {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--dim);
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+.hero-divider {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--cyan), rgba(0,229,255,0.3), transparent);
+  box-shadow: 0 0 12px rgba(0,229,255,0.2);
+  position: relative;
+}
+.hero-divider::after {
+  content: '◆';
+  position: absolute;
+  right: 0; top: 50%;
+  transform: translateY(-50%);
+  color: var(--cyan);
+  font-size: 8px;
+  text-shadow: 0 0 8px var(--cyan);
+}
+
+/* ── OVERVIEW ── */
+.overview-block {
+  display: grid;
+  grid-template-columns: 3px 1fr;
+  gap: 0 28px;
+  margin: 44px 0;
+  align-items: stretch;
+}
+.overview-stripe {
+  background: linear-gradient(180deg, var(--cyan), var(--blue), transparent);
+  border-radius: 2px;
+}
+.overview-content {
+  background: linear-gradient(135deg, var(--bg2) 0%, var(--bg1) 100%);
+  border: 1px solid var(--border);
+  padding: 28px 32px;
+  position: relative;
+  overflow: hidden;
+}
+.overview-content::before {
+  content: 'OVERVIEW';
+  position: absolute;
+  top: 18px; right: 24px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: rgba(0,229,255,0.06);
+  font-weight: bold;
+}
+.overview-content p {
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--mid);
+  margin-bottom: 14px;
+}
+.overview-content p:last-child { margin-bottom: 0; }
+.overview-content p strong { color: var(--white); font-weight: 600; }
+
+/* ── SECTION HEADERS ── */
+.sec-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 60px 0 28px;
+}
+.sec-pip {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+}
+.sec-pip::after {
+  content: '';
+  position: absolute; inset: -4px;
+  border-radius: 50%;
+  animation: pipRing 2.5s ease-in-out infinite;
+}
+.pip-g { background: var(--green); box-shadow: 0 0 10px var(--green); }
+.pip-g::after { border: 1px solid var(--green2); }
+.pip-a { background: var(--amber); box-shadow: 0 0 10px var(--amber); }
+.pip-a::after { border: 1px solid var(--amber2); animation-delay: 0.3s; }
+.pip-b { background: var(--blue);  box-shadow: 0 0 10px var(--blue); }
+.pip-b::after { border: 1px solid var(--blue2); animation-delay: 0.6s; }
+@keyframes pipRing {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 0.15; transform: scale(1.9); }
+}
+.sec-label {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.sl-g { color: var(--green); text-shadow: 0 0 16px rgba(0,255,136,0.4); }
+.sl-a { color: var(--amber); text-shadow: 0 0 16px rgba(255,170,0,0.4); }
+.sl-b { color: var(--blue);  text-shadow: 0 0 16px rgba(77,159,255,0.4); }
+.sec-rule { flex: 1; height: 1px; }
+.sr-g { background: linear-gradient(90deg, rgba(0,255,136,0.4), transparent); }
+.sr-a { background: linear-gradient(90deg, rgba(255,170,0,0.4), transparent); }
+.sr-b { background: linear-gradient(90deg, rgba(77,159,255,0.4), transparent); }
+.sec-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 2px;
+}
+
+/* ── CARDS ── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  gap: 16px;
+}
+.card {
+  background: var(--bg1);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+  animation: cardIn 0.5s ease both;
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.card:nth-child(1){animation-delay:.05s}
+.card:nth-child(2){animation-delay:.12s}
+.card:nth-child(3){animation-delay:.19s}
+.card:nth-child(4){animation-delay:.26s}
+.card:nth-child(5){animation-delay:.33s}
+.card:hover {
+  border-color: var(--border2);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+}
+.glow-bar {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; opacity: 0;
+  transition: opacity 0.3s;
+}
+.card:hover .glow-bar { opacity: 1; }
+.card.cg .glow-bar { background: var(--green); box-shadow: 0 0 12px var(--green), 0 0 30px rgba(0,255,136,0.3); }
+.card.ca .glow-bar { background: var(--amber); box-shadow: 0 0 12px var(--amber), 0 0 30px rgba(255,170,0,0.3); }
+.card.cb .glow-bar { background: var(--blue);  box-shadow: 0 0 12px var(--blue),  0 0 30px rgba(77,159,255,0.3); }
+.card::after {
+  content: ''; position: absolute; bottom: 0; right: 0;
+  width: 0; height: 0; border-style: solid;
+  border-width: 0 0 24px 24px;
+  border-color: transparent transparent var(--bg0) transparent;
+}
+.ch {
+  display: flex; align-items: center; gap: 14px;
+  padding: 18px 22px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.ch-icon { font-size: 26px; line-height: 1; flex-shrink: 0; }
+.ch-text { flex: 1; min-width: 0; }
+.ch-name {
+  font-family: var(--font-display);
+  font-size: 0.85rem; font-weight: 700;
+  letter-spacing: 1.5px; color: var(--white);
+  text-transform: uppercase;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ch-code {
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 2px; color: var(--cyan); margin-top: 3px; opacity: 0.7;
+}
+.ch-badge {
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 2px; padding: 5px 12px;
+  text-transform: uppercase; flex-shrink: 0; border: 1px solid;
+}
+.badge-active  { color: var(--green);  border-color: rgba(0,255,136,0.3); background: rgba(0,255,136,0.05); }
+.badge-offline { color: var(--dim);    border-color: rgba(100,100,100,0.2); background: rgba(50,50,50,0.1); }
+.badge-planned { color: var(--blue);   border-color: rgba(77,159,255,0.3); background: rgba(77,159,255,0.05); }
+.cb-inner { padding: 20px 22px; }
+.cb-role {
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 2px; color: var(--cyan); opacity: 0.6;
+  text-transform: uppercase; margin-bottom: 12px;
+}
+.cb-desc {
+  font-size: 13.5px; line-height: 1.75; color: var(--mid); margin-bottom: 18px;
+}
+.tags-label {
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 2.5px; color: var(--dim);
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.tag {
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--dim); background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.07);
+  padding: 3px 10px; letter-spacing: 0.5px; transition: all 0.2s;
+}
+.card:hover .tag { color: var(--mid); border-color: var(--border); }
+.notes-strip {
+  display: flex; gap: 10px; border-top: 1px solid var(--border);
+  padding-top: 14px; margin-top: 4px; align-items: flex-start;
+}
+.notes-icon {
+  font-family: var(--font-mono); font-size: 9px;
+  color: var(--amber); letter-spacing: 1px;
+  flex-shrink: 0; padding-top: 2px; opacity: 0.6;
+}
+.notes-text { font-size: 12.5px; color: var(--dim); line-height: 1.6; font-style: italic; }
+
+/* ── DOC MATRIX ── */
+.doc-matrix {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px; margin-top: 16px;
+}
+.doc-cell {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-bottom: 2px solid transparent;
+  padding: 14px 16px; text-align: center;
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 1.5px; color: var(--dim);
+  text-transform: uppercase; transition: all 0.25s;
+}
+.doc-cell:hover { color: var(--white); border-bottom-color: var(--cyan); background: var(--bg3); }
+
+/* ── SKILLS ── */
+.skills-flex { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+.skill-chip {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg2); border: 1px solid var(--border);
+  padding: 10px 18px; font-size: 13px;
+  font-family: var(--font-body); color: var(--mid); transition: all 0.25s;
+}
+.skill-chip::before { content: '▸'; color: var(--cyan); font-size: 10px; }
+.skill-chip:hover { color: var(--white); border-color: var(--border2); transform: translateX(3px); }
+
+/* ── ROADMAP ── */
+.roadmap { margin-top: 12px; display: flex; flex-direction: column; }
+.rm-item {
+  display: grid;
+  grid-template-columns: 60px 3px 1fr;
+  gap: 0 20px; align-items: stretch; padding: 4px 0;
+}
+.rm-num {
+  font-family: var(--font-display); font-size: 2.5rem; font-weight: 800;
+  color: rgba(0,229,255,0.07); line-height: 1;
+  text-align: right; align-self: center; transition: color 0.3s;
+}
+.rm-item:hover .rm-num { color: rgba(0,229,255,0.2); }
+.rm-spine { display: flex; flex-direction: column; align-items: center; }
+.rm-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--cyan); border: 2px solid var(--bg0);
+  box-shadow: 0 0 8px var(--cyan); flex-shrink: 0;
+  margin-top: 12px; transition: box-shadow 0.3s;
+}
+.rm-item:hover .rm-dot { box-shadow: 0 0 16px var(--cyan); }
+.rm-line { flex: 1; width: 1px; background: var(--border); }
+.rm-item:last-child .rm-line { display: none; }
+.rm-content { padding: 10px 0 20px; border-bottom: 1px solid var(--border); }
+.rm-item:last-child .rm-content { border-bottom: none; }
+.rm-title { font-size: 14px; color: var(--white); font-weight: 500; line-height: 1.4; }
+
+/* ── FOOTER ── */
+.footer {
+  margin-top: 80px; border-top: 1px solid var(--border);
+  padding-top: 32px; display: flex;
+  justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 16px;
+}
+.footer-logo {
+  font-family: var(--font-display); font-size: 1.2rem; font-weight: 800;
+  letter-spacing: 6px; color: var(--cyan);
+  text-shadow: 0 0 20px rgba(0,229,255,0.35); text-transform: uppercase;
+}
+.footer-meta {
+  font-family: var(--font-mono); font-size: 10px;
+  color: var(--dim); letter-spacing: 2px; text-align: right;
+}
+
+/* ── FADE IN ── */
+.fi { opacity: 0; transform: translateY(14px); animation: fi 0.55s ease forwards; }
+@keyframes fi { to { opacity: 1; transform: none; } }
+.fi-1{animation-delay:.1s} .fi-2{animation-delay:.2s} .fi-3{animation-delay:.3s}
+.fi-4{animation-delay:.4s} .fi-5{animation-delay:.5s} .fi-6{animation-delay:.6s}
+.fi-7{animation-delay:.7s} .fi-8{animation-delay:.8s}
+
+@media (max-width: 680px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-stats { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
+  .card-grid { grid-template-columns: 1fr; }
+  .doc-matrix { grid-template-columns: 1fr 1fr; }
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg0); }
+::-webkit-scrollbar-thumb { background: var(--border2); }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-vignette"></div>
+<div class="bg-scanlines"></div>
+<div class="bg-corner"></div>
+
+<div class="page">
+
+  <!-- HERO -->
+  <header class="hero fi fi-1">
+    <div class="hero-left">
+      <div class="hero-eyebrow">// HOMELAB INFRASTRUCTURE REGISTRY</div>
+      <h1 class="hero-title">
+        <span>Project</span>
+        <span class="accent">Cerberus</span>
+      </h1>
+      <p class="hero-subtitle">Hardware &amp; Infrastructure Documentation</p>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-box"><div class="stat-val">5</div><div class="stat-lbl">Active Devices</div></div>
+      <div class="stat-box"><div class="stat-val">2</div><div class="stat-lbl">Planned Phase</div></div>
+      <div class="stat-box"><div class="stat-val">1</div><div class="stat-lbl">Retired Units</div></div>
+    </div>
+    <div class="hero-divider"></div>
+  </header>
+
+  <!-- OVERVIEW -->
+  <div class="overview-block fi fi-2">
+    <div class="overview-stripe"></div>
+    <div class="overview-content">
+      <p>Project Cerberus is my <strong>enterprise-style homelab</strong>, built to strengthen hands-on skills across infrastructure, networking, virtualisation and cybersecurity. The goal is to create an environment that feels as close to real-world IT as possible — a place to build, test, troubleshoot and document systems properly.</p>
+      <p>This is not just hardware sitting on a rack. <strong>Each phase is tracked and documented</strong> through Notion, including implementation steps, issues encountered, troubleshooting, fixes applied and lessons learned along the way.</p>
+    </div>
+  </div>
+
+  <!-- ACTIVE -->
+  <div class="sec-head fi fi-3">
+    <div class="sec-pip pip-g"></div>
+    <div class="sec-label sl-g">Active Hardware</div>
+    <div class="sec-rule sr-g"></div>
+    <div class="sec-count">05 UNITS</div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card cg">
+      <div class="glow-bar"></div>
+      <div class="ch">
+        <div class="ch-icon">🖥️</div>
+        <div class="ch-text"><div class="ch-name">Dell PowerEdge R620</div><div class="ch-code">// "DEKU" // COMPUTE NODE //</div></div>
+        <div class="ch-badge badge-active">● Active</div>
+      </div>
+      <div class="cb-inner">
+        <div class="cb-role">Virtualisation Host / Lab Compute Node</div>
+        <p class="cb-desc">Forms part of the main compute layer in the lab — used for virtualisation, infrastructure services and general hands-on server administration. Provides a solid enterprise platform for building and managing virtual machines, testing server roles and running supporting lab workloads.</p>
+        <div class="tags-label">// Primary Use Cases</div>
+        <div class="tags">
+          <span class="tag">Hosting VMs</span><span class="tag">Infrastructure Services</span>
+          <span class="tag">Server Workload Testing</span><span class="tag">Sysadmin Skills</span><span class="tag">Core Lab Services</span>
+        </div>
+        <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">Core part of the compute layer. Used to support realistic infrastructure testing and service deployment.</div></div>
+      </div>
+    </div>
+
+    <div class="card cg">
+      <div class="glow-bar"></div>
+      <div class="ch">
+        <div class="ch-icon">🖥️</div>
+        <div class="ch-text"><div class="ch-name">HPE ProLiant DL380 Gen9</div><div class="ch-code">// "HYRULE" // ENTERPRISE HOST //</div></div>
+        <div class="ch-badge badge-active">● Active</div>
+      </div>
+      <div class="cb-inner">
+        <div class="cb-role">Main Enterprise Workload Host / Future FC Storage Platform</div>
+        <p class="cb-desc">One of the key servers in the lab — a major platform for virtualisation and enterprise-style workload hosting. Plays an important future role in the storage side of the environment, planned for direct Fibre Channel connectivity to the HPE MSA 2040 when that phase is implemented.</p>
+        <div class="tags-label">// Primary Use Cases</div>
+        <div class="tags">
+          <span class="tag">Core Virtual Workloads</span><span class="tag">Infrastructure Services</span>
+          <span class="tag">Enterprise Platform</span><span class="tag">Future FC Storage</span>
+        </div>
+        <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">Central to future storage expansion plans. Important part of the long-term infrastructure design.</div></div>
+      </div>
+    </div>
+
+    <div class="card cg">
+      <div class="glow-bar"></div>
+      <div class="ch">
+        <div class="ch-icon">🌐</div>
+        <div class="ch-text"><div class="ch-name">Cisco Catalyst 2960X 48-Port</div><div class="ch-code">// LAYER 2 ACCESS SWITCH //</div></div>
+        <div class="ch-badge badge-active">● Active</div>
+      </div>
+      <div class="cb-inner">
+        <div class="cb-role">Layer 2 Access Switching / Current Network Backbone</div>
+        <p class="cb-desc">Provides the main switching function within the lab, supporting network connectivity across the entire environment. Used for VLAN-based switching, device connectivity and general network structure while the wider routing and segmentation design continues to evolve.</p>
+        <div class="tags-label">// Primary Use Cases</div>
+        <div class="tags">
+          <span class="tag">Layer 2 Switching</span><span class="tag">VLAN Connectivity</span>
+          <span class="tag">Access Layer</span><span class="tag">Device Distribution</span>
+        </div>
+        <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">Current main switch in active use. Supports existing network design while L3 plans are being developed.</div></div>
+      </div>
+    </div>
+
+    <div class="card cg">
+      <div class="glow-bar"></div>
+      <div class="ch">
+        <div class="ch-icon">🔥</div>
+        <div class="ch-text"><div class="ch-name">FortiGate 300D</div><div class="ch-code">// PERIMETER FIREWALL //</div></div>
+        <div class="ch-badge badge-active">● Active</div>
+      </div>
+      <div class="cb-inner">
+        <div class="cb-role">Firewall / Perimeter Security / Access Control</div>
+        <p class="cb-desc">The main firewall platform in the lab — lines up strongly with the Cerberus theme of controlled access and defensive design. Supports traffic filtering, policy control and secure access while giving hands-on exposure to enterprise firewall administration and segmented network security.</p>
+        <div class="tags-label">// Primary Use Cases</div>
+        <div class="tags">
+          <span class="tag">Perimeter Security</span><span class="tag">Traffic Filtering</span>
+          <span class="tag">Policy Control</span><span class="tag">VLAN-Aware Access</span><span class="tag">Secure Remote Access</span>
+        </div>
+        <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">Core security component. Replaced the MikroTik hEX S as the active edge security platform.</div></div>
+      </div>
+    </div>
+
+    <div class="card cg">
+      <div class="glow-bar"></div>
+      <div class="ch">
+        <div class="ch-icon">🗄️</div>
+        <div class="ch-text"><div class="ch-name">12U Open Air Rack</div><div class="ch-code">// PHYSICAL INFRASTRUCTURE //</div></div>
+        <div class="ch-badge badge-active">● Active</div>
+      </div>
+      <div class="cb-inner">
+        <div class="cb-role">Physical Infrastructure Housing</div>
+        <p class="cb-desc">Forms the physical base of the homelab and provides a structured way to mount and organise core equipment. Makes the setup more manageable, easier to document and closer in feel to a proper infrastructure deployment rather than disconnected standalone hardware.</p>
+        <div class="tags-label">// Primary Use Cases</div>
+        <div class="tags">
+          <span class="tag">Hardware Housing</span><span class="tag">Physical Organisation</span>
+          <span class="tag">Cable Management</span><span class="tag">Lab Presentation</span>
+        </div>
+        <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">Open air rack. Forms the physical backbone of the active setup.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INACTIVE -->
+  <div class="sec-head fi fi-4">
+    <div class="sec-pip pip-a"></div>
+    <div class="sec-label sl-a">Inactive / Previously Used</div>
+    <div class="sec-rule sr-a"></div>
+    <div class="sec-count">01 UNIT</div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card ca">
+      <div class="glow-bar"></div>
+      <div class="ch">
+        <div class="ch-icon">📡</div>
+        <div class="ch-text"><div class="ch-name">MikroTik hEX S</div><div class="ch-code">// PREVIOUS EDGE ROUTER //</div></div>
+        <div class="ch-badge badge-offline">○ Offline</div>
+      </div>
+      <div class="cb-inner">
+        <div class="cb-role">Previous Edge Router / Routing Platform</div>
+        <p class="cb-desc">Used as the initial edge router in the lab before the FortiGate 300D was implemented. Provided the original routing and edge-network function during the earlier stages of the homelab build — useful for testing routing concepts, connectivity and general network design.</p>
+        <div class="tags-label">// Previous Use Cases</div>
+        <div class="tags">
+          <span class="tag">Initial Edge Routing</span><span class="tag">Connectivity Testing</span>
+          <span class="tag">WAN-Style Config</span><span class="tag">Early Lab Network Design</span>
+        </div>
+        <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">Currently offline. Migrated to FortiGate 300D. Retained as part of project history and design evolution.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLANNED -->
+  <div class="sec-head fi fi-5">
+    <div class="sec-pip pip-b"></div>
+    <div class="sec-label sl-b">Planned / Implementation Phase</div>
+    <div class="sec-rule sr-b"></div>
+    <div class="sec-count">02 UNITS</div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card cb">
+      <div class="glow-bar"></div>
+      <div class="ch">
+        <div class="ch-icon">💾</div>
+        <div class="ch-text"><div class="ch-name">HPE MSA 2040</div><div class="ch-code">// SHARED STORAGE PLATFORM //</div></div>
+        <div class="ch-badge badge-planned">◈ Planned</div>
+      </div>
+      <div class="cb-inner">
+        <div class="cb-role">Shared Storage Platform / Future Implementation</div>
+        <p class="cb-desc">Part of the next planned phase of Project Cerberus, intended to bring shared storage into the lab environment. Planned for Fibre Channel connectivity directly to the HPE DL380 Gen9, moving the lab closer to a realistic enterprise storage and virtualisation model.</p>
+        <div class="tags-label">// Planned Use Cases</div>
+        <div class="tags">
+          <span class="tag">Shared VM Storage</span><span class="tag">Centralised Storage</span>
+          <span class="tag">SAN-Style Learning</span><span class="tag">Advanced Infra Design</span>
+        </div>
+        <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">In planning phase. Connects via Fibre Channel to DL380 Gen9. Not yet part of the active setup.</div></div>
+      </div>
+    </div>
+
+    <div class="card cb">
+      <div class="glow-bar"></div>
+      <div class="ch">
+        <div class="ch-icon">🌍</div>
+        <div class="ch-text"><div class="ch-name">Cisco Catalyst 3650 48P PoE+</div><div class="ch-code">// FUTURE L3 SWITCH //</div></div>
+        <div class="ch-badge badge-planned">◈ Planned</div>
+      </div>
+      <div class="cb-inner">
+        <div class="cb-role">Future Layer 3 Switching / Inter-VLAN Routing Platform</div>
+        <p class="cb-desc">Planned as the future upgrade path for the network design — migration from the current Layer 2 switching model to a dedicated Layer 3 approach. Will support inter-VLAN routing at the switch layer and create a more enterprise-style network structure without relying on the firewall for all routing decisions.</p>
+        <div class="tags-label">// Planned Use Cases</div>
+        <div class="tags">
+          <span class="tag">Layer 3 Switching</span><span class="tag">Inter-VLAN Routing</span>
+          <span class="tag">Internal Traffic Handling</span><span class="tag">Network Segmentation</span><span class="tag">Enterprise Architecture</span>
+        </div>
+        <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">In planning phase. Intended move from L2 to dedicated L3 switching for stronger segmentation and performance.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOCUMENTATION -->
+  <div class="sec-head fi fi-6">
+    <div class="sec-pip pip-g"></div>
+    <div class="sec-label sl-g">Documentation &amp; Project Tracking</div>
+    <div class="sec-rule sr-g"></div>
+  </div>
+
+  <div class="overview-block fi fi-6">
+    <div class="overview-stripe"></div>
+    <div class="overview-content">
+      <p>Project Cerberus is documented as an <strong>active technical project</strong> — not just a collection of hardware. Each stage is tracked with a focus on structure, visibility and lessons learned throughout the build process. This creates a proper record of the lab's development and makes it easy to show not just what was built, but how it was built, what went wrong and how those issues were resolved.</p>
+    </div>
+  </div>
+
+  <div class="doc-matrix fi fi-6">
+    <div class="doc-cell">Project Goals</div>
+    <div class="doc-cell">Hardware Inventory</div>
+    <div class="doc-cell">Implementation Steps</div>
+    <div class="doc-cell">Config Changes</div>
+    <div class="doc-cell">Issues Encountered</div>
+    <div class="doc-cell">Troubleshooting</div>
+    <div class="doc-cell">Fixes Applied</div>
+    <div class="doc-cell">Lessons Learned</div>
+    <div class="doc-cell">Future Planning</div>
+  </div>
+
+  <!-- SKILLS -->
+  <div class="sec-head fi fi-7">
+    <div class="sec-pip pip-g"></div>
+    <div class="sec-label sl-g">Core Skills Developed</div>
+    <div class="sec-rule sr-g"></div>
+  </div>
+
+  <div class="skills-flex fi fi-7">
+    <div class="skill-chip">Infrastructure &amp; Systems Administration</div>
+    <div class="skill-chip">Networking &amp; Segmentation</div>
+    <div class="skill-chip">Virtualisation &amp; Platform Engineering</div>
+    <div class="skill-chip">Cybersecurity &amp; Access Control</div>
+    <div class="skill-chip">Technical Documentation</div>
+    <div class="skill-chip">Troubleshooting &amp; Root Cause Analysis</div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div class="sec-head fi fi-8">
+    <div class="sec-pip pip-b"></div>
+    <div class="sec-label sl-b">Future Improvements Roadmap</div>
+    <div class="sec-rule sr-b"></div>
+  </div>
+
+  <div class="roadmap fi fi-8">
+    <div class="rm-item">
+      <div class="rm-num">01</div>
+      <div class="rm-spine"><div class="rm-dot"></div><div class="rm-line"></div></div>
+      <div class="rm-content"><div class="rm-title">Implement HPE MSA 2040 shared storage via Fibre Channel to DL380 Gen9</div></div>
+    </div>
+    <div class="rm-item">
+      <div class="rm-num">02</div>
+      <div class="rm-spine"><div class="rm-dot"></div><div class="rm-line"></div></div>
+      <div class="rm-content"><div class="rm-title">Migrate to dedicated L3 switching architecture with Cisco Catalyst 3650</div></div>
+    </div>
+    <div class="rm-item">
+      <div class="rm-num">03</div>
+      <div class="rm-spine"><div class="rm-dot"></div><div class="rm-line"></div></div>
+      <div class="rm-content"><div class="rm-title">Expand virtual workloads and service hosting across the compute layer</div></div>
+    </div>
+    <div class="rm-item">
+      <div class="rm-num">04</div>
+      <div class="rm-spine"><div class="rm-dot"></div><div class="rm-line"></div></div>
+      <div class="rm-content"><div class="rm-title">Refine VLAN design and network segmentation strategy</div></div>
+    </div>
+    <div class="rm-item">
+      <div class="rm-num">05</div>
+      <div class="rm-spine"><div class="rm-dot"></div><div class="rm-line"></div></div>
+      <div class="rm-content"><div class="rm-title">Add monitoring, logging and security visibility tooling (SIEM, IDS, NetFlow)</div></div>
+    </div>
+    <div class="rm-item">
+      <div class="rm-num">06</div>
+      <div class="rm-spine"><div class="rm-dot"></div><div class="rm-line"></div></div>
+      <div class="rm-content"><div class="rm-title">Improve documentation depth with network diagrams, rack photos and project timelines</div></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer fi fi-8">
+    <div class="footer-logo">⬡ Cerberus</div>
+    <div class="footer-meta">HARDWARE &amp; INFRASTRUCTURE REGISTRY<br>PROJECT PHASE // v1.0 // ACTIVE</div>
+  </footer>
+
+</div>
+</body>
+</html>
