@@ -42,6 +42,7 @@ body {
   cursor: crosshair;
 }
 
+/* ── BACKGROUNDS ── */
 .bg-grid {
   position: fixed; inset: 0; z-index: 0;
   background-image:
@@ -50,31 +51,64 @@ body {
   background-size: 48px 48px;
   animation: gridDrift 20s linear infinite;
 }
-@keyframes gridDrift {
-  0% { background-position: 0 0; }
-  100% { background-position: 48px 48px; }
-}
-
+@keyframes gridDrift { 0% { background-position: 0 0; } 100% { background-position: 48px 48px; } }
 .bg-vignette {
-  position: fixed; inset: 0; z-index: 0;
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background: radial-gradient(ellipse at center, transparent 40%, rgba(5,7,9,0.85) 100%);
-  pointer-events: none;
 }
-
 .bg-scanlines {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg, transparent, transparent 3px,
-    rgba(0,0,0,0.12) 3px, rgba(0,0,0,0.12) 4px
-  );
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.1) 3px, rgba(0,0,0,0.1) 4px);
 }
 
-.bg-corner {
-  position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none;
-  width: 400px; height: 400px;
-  background: radial-gradient(ellipse at top left, rgba(0,229,255,0.06) 0%, transparent 65%);
+/* ── STICKY NAV ── */
+.top-nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(5,7,9,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 28px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 4px;
+  color: var(--cyan);
+  text-shadow: 0 0 12px rgba(0,229,255,0.4);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.nav-links {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.nav-link {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--dim);
+  text-decoration: none;
+  padding: 5px 12px;
+  border: 1px solid transparent;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  cursor: pointer;
+  background: none;
+}
+.nav-link:hover {
+  color: var(--cyan);
+  border-color: var(--border);
+  background: rgba(0,229,255,0.04);
 }
 
+/* ── PAGE ── */
 .page {
   position: relative; z-index: 1;
   max-width: 1160px;
@@ -84,13 +118,12 @@ body {
 
 /* ── HERO ── */
 .hero {
-  padding: 70px 0 56px;
+  padding: 60px 0 48px;
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: end;
   gap: 40px;
 }
-
 .hero-eyebrow {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -108,7 +141,6 @@ body {
   background: var(--cyan);
   box-shadow: 0 0 6px var(--cyan);
 }
-
 .hero-title {
   font-family: var(--font-display);
   font-weight: 800;
@@ -123,7 +155,6 @@ body {
   color: var(--cyan);
   text-shadow: 0 0 30px rgba(0,229,255,0.5), 0 0 60px rgba(0,229,255,0.2);
 }
-
 .hero-subtitle {
   font-family: var(--font-mono);
   font-size: 13px;
@@ -132,14 +163,7 @@ body {
   margin-top: 16px;
   text-transform: uppercase;
 }
-
-.hero-stats {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: flex-end;
-}
-
+.hero-stats { display: flex; flex-direction: column; gap: 12px; align-items: flex-end; }
 .stat-box {
   background: var(--bg2);
   border: 1px solid var(--border);
@@ -150,46 +174,31 @@ body {
 }
 .stat-val {
   font-family: var(--font-display);
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--cyan);
-  line-height: 1;
+  font-size: 2rem; font-weight: 700;
+  color: var(--cyan); line-height: 1;
   text-shadow: 0 0 20px rgba(0,229,255,0.4);
 }
 .stat-lbl {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 2px;
-  color: var(--dim);
-  text-transform: uppercase;
-  margin-top: 3px;
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 2px; color: var(--dim);
+  text-transform: uppercase; margin-top: 3px;
 }
-
 .hero-divider {
-  grid-column: 1 / -1;
-  width: 100%;
-  height: 1px;
+  grid-column: 1 / -1; width: 100%; height: 1px;
   background: linear-gradient(90deg, var(--cyan), rgba(0,229,255,0.3), transparent);
   box-shadow: 0 0 12px rgba(0,229,255,0.2);
   position: relative;
 }
 .hero-divider::after {
-  content: '◆';
-  position: absolute;
-  right: 0; top: 50%;
-  transform: translateY(-50%);
-  color: var(--cyan);
-  font-size: 8px;
+  content: '◆'; position: absolute; right: 0; top: 50%;
+  transform: translateY(-50%); color: var(--cyan); font-size: 8px;
   text-shadow: 0 0 8px var(--cyan);
 }
 
 /* ── OVERVIEW ── */
 .overview-block {
-  display: grid;
-  grid-template-columns: 3px 1fr;
-  gap: 0 28px;
-  margin: 44px 0;
-  align-items: stretch;
+  display: grid; grid-template-columns: 3px 1fr;
+  gap: 0 28px; margin: 44px 0; align-items: stretch;
 }
 .overview-stripe {
   background: linear-gradient(180deg, var(--cyan), var(--blue), transparent);
@@ -198,46 +207,62 @@ body {
 .overview-content {
   background: linear-gradient(135deg, var(--bg2) 0%, var(--bg1) 100%);
   border: 1px solid var(--border);
-  padding: 28px 32px;
-  position: relative;
-  overflow: hidden;
+  padding: 28px 32px; position: relative; overflow: hidden;
 }
 .overview-content::before {
-  content: 'OVERVIEW';
-  position: absolute;
-  top: 18px; right: 24px;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 3px;
-  color: rgba(0,229,255,0.06);
-  font-weight: bold;
+  content: 'OVERVIEW'; position: absolute; top: 18px; right: 24px;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 3px;
+  color: rgba(0,229,255,0.06); font-weight: bold;
 }
 .overview-content p {
-  font-size: 14px;
-  line-height: 1.85;
-  color: var(--mid);
-  margin-bottom: 14px;
+  font-size: 14px; line-height: 1.85; color: var(--mid); margin-bottom: 14px;
 }
 .overview-content p:last-child { margin-bottom: 0; }
 .overview-content p strong { color: var(--white); font-weight: 600; }
 
+/* ── FILTER BAR ── */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+  align-items: center;
+}
+.filter-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--dim);
+  text-transform: uppercase;
+  margin-right: 4px;
+}
+.filter-btn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 6px 16px;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--dim);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.filter-btn:hover { color: var(--white); border-color: var(--border2); }
+.filter-btn.active { color: var(--cyan); border-color: var(--cyan); background: rgba(0,229,255,0.06); box-shadow: 0 0 12px rgba(0,229,255,0.15); }
+.filter-btn.f-green.active { color: var(--green); border-color: var(--green); background: rgba(0,255,136,0.06); box-shadow: 0 0 12px rgba(0,255,136,0.15); }
+.filter-btn.f-amber.active { color: var(--amber); border-color: var(--amber); background: rgba(255,170,0,0.06); box-shadow: 0 0 12px rgba(255,170,0,0.15); }
+.filter-btn.f-blue.active  { color: var(--blue);  border-color: var(--blue);  background: rgba(77,159,255,0.06); box-shadow: 0 0 12px rgba(77,159,255,0.15); }
+
 /* ── SECTION HEADERS ── */
 .sec-head {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin: 60px 0 28px;
+  display: flex; align-items: center; gap: 14px; margin: 52px 0 20px;
 }
 .sec-pip {
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  position: relative;
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; position: relative;
 }
 .sec-pip::after {
-  content: '';
-  position: absolute; inset: -4px;
-  border-radius: 50%;
+  content: ''; position: absolute; inset: -4px; border-radius: 50%;
   animation: pipRing 2.5s ease-in-out infinite;
 }
 .pip-g { background: var(--green); box-shadow: 0 0 10px var(--green); }
@@ -251,12 +276,8 @@ body {
   50% { opacity: 0.15; transform: scale(1.9); }
 }
 .sec-label {
-  font-family: var(--font-display);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 5px;
-  text-transform: uppercase;
-  flex-shrink: 0;
+  font-family: var(--font-display); font-size: 0.8rem; font-weight: 700;
+  letter-spacing: 5px; text-transform: uppercase; flex-shrink: 0;
 }
 .sl-g { color: var(--green); text-shadow: 0 0 16px rgba(0,255,136,0.4); }
 .sl-a { color: var(--amber); text-shadow: 0 0 16px rgba(255,170,0,0.4); }
@@ -265,107 +286,121 @@ body {
 .sr-g { background: linear-gradient(90deg, rgba(0,255,136,0.4), transparent); }
 .sr-a { background: linear-gradient(90deg, rgba(255,170,0,0.4), transparent); }
 .sr-b { background: linear-gradient(90deg, rgba(77,159,255,0.4), transparent); }
-.sec-count {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--dim);
-  letter-spacing: 2px;
-}
+.sec-count { font-family: var(--font-mono); font-size: 10px; color: var(--dim); letter-spacing: 2px; }
 
 /* ── CARDS ── */
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
-  gap: 16px;
-}
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(500px, 1fr)); gap: 12px; }
+
 .card {
   background: var(--bg1);
   border: 1px solid var(--border);
-  position: relative;
-  overflow: hidden;
-  transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+  position: relative; overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
   animation: cardIn 0.5s ease both;
 }
-@keyframes cardIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.card:nth-child(1){animation-delay:.05s}
-.card:nth-child(2){animation-delay:.12s}
-.card:nth-child(3){animation-delay:.19s}
-.card:nth-child(4){animation-delay:.26s}
-.card:nth-child(5){animation-delay:.33s}
-.card:hover {
-  border-color: var(--border2);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-}
+@keyframes cardIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.card:nth-child(1){animation-delay:.05s} .card:nth-child(2){animation-delay:.1s}
+.card:nth-child(3){animation-delay:.15s} .card:nth-child(4){animation-delay:.2s}
+.card:nth-child(5){animation-delay:.25s}
+
+.card.hidden { display: none; }
+
+.card:hover { border-color: var(--border2); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+
 .glow-bar {
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 2px; opacity: 0;
-  transition: opacity 0.3s;
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  opacity: 0; transition: opacity 0.3s;
 }
 .card:hover .glow-bar { opacity: 1; }
-.card.cg .glow-bar { background: var(--green); box-shadow: 0 0 12px var(--green), 0 0 30px rgba(0,255,136,0.3); }
-.card.ca .glow-bar { background: var(--amber); box-shadow: 0 0 12px var(--amber), 0 0 30px rgba(255,170,0,0.3); }
-.card.cb .glow-bar { background: var(--blue);  box-shadow: 0 0 12px var(--blue),  0 0 30px rgba(77,159,255,0.3); }
+.card.cg .glow-bar { background: var(--green); box-shadow: 0 0 12px var(--green); }
+.card.ca .glow-bar { background: var(--amber); box-shadow: 0 0 12px var(--amber); }
+.card.cb .glow-bar { background: var(--blue);  box-shadow: 0 0 12px var(--blue); }
 .card::after {
   content: ''; position: absolute; bottom: 0; right: 0;
   width: 0; height: 0; border-style: solid;
-  border-width: 0 0 24px 24px;
+  border-width: 0 0 20px 20px;
   border-color: transparent transparent var(--bg0) transparent;
 }
-.ch {
+
+/* ── CARD HEADER ,always visible, clickable ── */
+.card-trigger {
   display: flex; align-items: center; gap: 14px;
-  padding: 18px 22px 16px;
-  border-bottom: 1px solid var(--border);
+  padding: 16px 20px; cursor: pointer;
+  user-select: none; position: relative;
+  transition: background 0.2s;
 }
-.ch-icon { font-size: 26px; line-height: 1; flex-shrink: 0; }
+.card-trigger:hover { background: rgba(255,255,255,0.02); }
+
+.ch-icon { font-size: 24px; line-height: 1; flex-shrink: 0; }
 .ch-text { flex: 1; min-width: 0; }
 .ch-name {
-  font-family: var(--font-display);
-  font-size: 0.85rem; font-weight: 700;
-  letter-spacing: 1.5px; color: var(--white);
-  text-transform: uppercase;
+  font-family: var(--font-display); font-size: 0.85rem; font-weight: 700;
+  letter-spacing: 1.5px; color: var(--white); text-transform: uppercase;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .ch-code {
   font-family: var(--font-mono); font-size: 10px;
-  letter-spacing: 2px; color: var(--cyan); margin-top: 3px; opacity: 0.7;
+  letter-spacing: 2px; color: var(--cyan); margin-top: 3px; opacity: 0.6;
 }
+
+.ch-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
 .ch-badge {
   font-family: var(--font-mono); font-size: 9px;
-  letter-spacing: 2px; padding: 5px 12px;
-  text-transform: uppercase; flex-shrink: 0; border: 1px solid;
+  letter-spacing: 2px; padding: 4px 10px;
+  text-transform: uppercase; border: 1px solid;
 }
-.badge-active  { color: var(--green);  border-color: rgba(0,255,136,0.3); background: rgba(0,255,136,0.05); }
+.badge-active  { color: var(--green);  border-color: rgba(0,255,136,0.3);  background: rgba(0,255,136,0.05); }
 .badge-offline { color: var(--dim);    border-color: rgba(100,100,100,0.2); background: rgba(50,50,50,0.1); }
-.badge-planned { color: var(--blue);   border-color: rgba(77,159,255,0.3); background: rgba(77,159,255,0.05); }
-.cb-inner { padding: 20px 22px; }
+.badge-planned { color: var(--blue);   border-color: rgba(77,159,255,0.3);  background: rgba(77,159,255,0.05); }
+
+/* Expand chevron */
+.chevron {
+  width: 20px; height: 20px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.3s ease;
+  color: var(--dim);
+}
+.chevron svg { width: 12px; height: 12px; }
+.card.expanded .chevron { transform: rotate(180deg); color: var(--cyan); }
+
+/* ── CARD BODY ,collapsible ── */
+.card-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;
+  opacity: 0;
+  border-top: 0px solid var(--border);
+}
+.card.expanded .card-body {
+  max-height: 600px;
+  opacity: 1;
+  border-top: 1px solid var(--border);
+}
+.card-body-inner { padding: 18px 20px; }
+
 .cb-role {
   font-family: var(--font-mono); font-size: 10px;
   letter-spacing: 2px; color: var(--cyan); opacity: 0.6;
-  text-transform: uppercase; margin-bottom: 12px;
+  text-transform: uppercase; margin-bottom: 10px;
 }
-.cb-desc {
-  font-size: 13.5px; line-height: 1.75; color: var(--mid); margin-bottom: 18px;
-}
+.cb-desc { font-size: 13.5px; line-height: 1.75; color: var(--mid); margin-bottom: 16px; }
 .tags-label {
   font-family: var(--font-mono); font-size: 9px;
   letter-spacing: 2.5px; color: var(--dim);
   text-transform: uppercase; margin-bottom: 8px;
 }
-.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
 .tag {
   font-family: var(--font-mono); font-size: 11px;
   color: var(--dim); background: rgba(255,255,255,0.02);
   border: 1px solid rgba(255,255,255,0.07);
   padding: 3px 10px; letter-spacing: 0.5px; transition: all 0.2s;
 }
-.card:hover .tag { color: var(--mid); border-color: var(--border); }
+.card.expanded .tag { color: var(--mid); border-color: var(--border); }
 .notes-strip {
   display: flex; gap: 10px; border-top: 1px solid var(--border);
-  padding-top: 14px; margin-top: 4px; align-items: flex-start;
+  padding-top: 12px; align-items: flex-start;
 }
 .notes-icon {
   font-family: var(--font-mono); font-size: 9px;
@@ -374,10 +409,22 @@ body {
 }
 .notes-text { font-size: 12.5px; color: var(--dim); line-height: 1.6; font-style: italic; }
 
+/* Expand hint on collapsed cards */
+.expand-hint {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--dim);
+  letter-spacing: 1px;
+  padding: 6px 20px 10px;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+.card.expanded .expand-hint { display: none; }
+.card:hover .expand-hint { opacity: 1; }
+
 /* ── DOC MATRIX ── */
 .doc-matrix {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 8px; margin-top: 16px;
 }
 .doc-cell {
@@ -386,7 +433,7 @@ body {
   padding: 14px 16px; text-align: center;
   font-family: var(--font-mono); font-size: 10px;
   letter-spacing: 1.5px; color: var(--dim);
-  text-transform: uppercase; transition: all 0.25s;
+  text-transform: uppercase; transition: all 0.25s; cursor: default;
 }
 .doc-cell:hover { color: var(--white); border-bottom-color: var(--cyan); background: var(--bg3); }
 
@@ -404,12 +451,11 @@ body {
 /* ── ROADMAP ── */
 .roadmap { margin-top: 12px; display: flex; flex-direction: column; }
 .rm-item {
-  display: grid;
-  grid-template-columns: 60px 3px 1fr;
-  gap: 0 20px; align-items: stretch; padding: 4px 0;
+  display: grid; grid-template-columns: 56px 3px 1fr;
+  gap: 0 18px; align-items: stretch; padding: 4px 0;
 }
 .rm-num {
-  font-family: var(--font-display); font-size: 2.5rem; font-weight: 800;
+  font-family: var(--font-display); font-size: 2.2rem; font-weight: 800;
   color: rgba(0,229,255,0.07); line-height: 1;
   text-align: right; align-self: center; transition: color 0.3s;
 }
@@ -424,9 +470,32 @@ body {
 .rm-item:hover .rm-dot { box-shadow: 0 0 16px var(--cyan); }
 .rm-line { flex: 1; width: 1px; background: var(--border); }
 .rm-item:last-child .rm-line { display: none; }
-.rm-content { padding: 10px 0 20px; border-bottom: 1px solid var(--border); }
+.rm-content { padding: 8px 0 18px; border-bottom: 1px solid var(--border); }
 .rm-item:last-child .rm-content { border-bottom: none; }
-.rm-title { font-size: 14px; color: var(--white); font-weight: 500; line-height: 1.4; }
+.rm-title { font-size: 14px; color: var(--white); font-weight: 500; line-height: 1.4; margin-bottom: 8px; }
+
+/* Progress bar */
+.rm-bar-wrap {
+  height: 3px; background: rgba(255,255,255,0.05);
+  border-radius: 2px; overflow: hidden; margin-top: 6px;
+}
+.rm-bar {
+  height: 100%; border-radius: 2px;
+  transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+  animation: barLoad 1.4s ease both;
+}
+@keyframes barLoad { from { width: 0 !important; } }
+.rm-bar.complete { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.rm-bar.progress { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+.rm-bar.planned  { background: var(--blue);  }
+.rm-status-tag {
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  margin-top: 4px; display: inline-block;
+}
+.tag-complete { color: var(--green); }
+.tag-progress { color: var(--cyan); }
+.tag-planned  { color: var(--dim); }
 
 /* ── FOOTER ── */
 .footer {
@@ -440,28 +509,34 @@ body {
   letter-spacing: 6px; color: var(--cyan);
   text-shadow: 0 0 20px rgba(0,229,255,0.35); text-transform: uppercase;
 }
-.footer-meta {
-  font-family: var(--font-mono); font-size: 10px;
-  color: var(--dim); letter-spacing: 2px; text-align: right;
+.footer-meta { font-family: var(--font-mono); font-size: 10px; color: var(--dim); letter-spacing: 2px; text-align: right; }
+.footer-links { display: flex; gap: 12px; flex-wrap: wrap; }
+.footer-link {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px;
+  color: var(--dim); text-decoration: none; text-transform: uppercase;
+  border: 1px solid var(--border); padding: 6px 14px; transition: all 0.2s;
 }
+.footer-link:hover { color: var(--cyan); border-color: var(--cyan); }
 
-/* ── FADE IN ── */
-.fi { opacity: 0; transform: translateY(14px); animation: fi 0.55s ease forwards; }
-@keyframes fi { to { opacity: 1; transform: none; } }
-.fi-1{animation-delay:.1s} .fi-2{animation-delay:.2s} .fi-3{animation-delay:.3s}
-.fi-4{animation-delay:.4s} .fi-5{animation-delay:.5s} .fi-6{animation-delay:.6s}
-.fi-7{animation-delay:.7s} .fi-8{animation-delay:.8s}
-
+/* Responsive */
 @media (max-width: 680px) {
   .hero { grid-template-columns: 1fr; }
   .hero-stats { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
   .card-grid { grid-template-columns: 1fr; }
   .doc-matrix { grid-template-columns: 1fr 1fr; }
+  .top-nav { padding: 10px 16px; }
 }
 
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: var(--bg0); }
 ::-webkit-scrollbar-thumb { background: var(--border2); }
+
+/* Fade in utility */
+.fi { opacity: 0; transform: translateY(14px); animation: fi 0.55s ease forwards; }
+@keyframes fi { to { opacity: 1; transform: none; } }
+.fi-1{animation-delay:.1s} .fi-2{animation-delay:.2s} .fi-3{animation-delay:.3s}
+.fi-4{animation-delay:.4s} .fi-5{animation-delay:.5s} .fi-6{animation-delay:.6s}
+.fi-7{animation-delay:.7s} .fi-8{animation-delay:.8s}
 </style>
 </head>
 <body>
@@ -469,9 +544,20 @@ body {
 <div class="bg-grid"></div>
 <div class="bg-vignette"></div>
 <div class="bg-scanlines"></div>
-<div class="bg-corner"></div>
 
-<div class="page">
+<!-- STICKY NAV -->
+<nav class="top-nav">
+  <a class="nav-logo" href="#top">⬡ CERBERUS</a>
+  <div class="nav-links">
+    <button class="nav-link" onclick="scrollTo('overview')">Overview</button>
+    <button class="nav-link" onclick="scrollTo('hardware')">Hardware</button>
+    <button class="nav-link" onclick="scrollTo('docs')">Docs</button>
+    <button class="nav-link" onclick="scrollTo('skills')">Skills</button>
+    <button class="nav-link" onclick="scrollTo('roadmap')">Roadmap</button>
+  </div>
+</nav>
+
+<div class="page" id="top">
 
   <!-- HERO -->
   <header class="hero fi fi-1">
@@ -484,129 +570,188 @@ body {
       <p class="hero-subtitle">Hardware &amp; Infrastructure Documentation</p>
     </div>
     <div class="hero-stats">
-      <div class="stat-box"><div class="stat-val">5</div><div class="stat-lbl">Active Devices</div></div>
-      <div class="stat-box"><div class="stat-val">2</div><div class="stat-lbl">Planned Phase</div></div>
-      <div class="stat-box"><div class="stat-val">1</div><div class="stat-lbl">Retired Units</div></div>
+      <div class="stat-box"><div class="stat-val" id="stat-active">5</div><div class="stat-lbl">Active Devices</div></div>
+      <div class="stat-box"><div class="stat-val" id="stat-planned">2</div><div class="stat-lbl">Planned Phase</div></div>
+      <div class="stat-box"><div class="stat-val" id="stat-offline">1</div><div class="stat-lbl">Retired Units</div></div>
     </div>
     <div class="hero-divider"></div>
   </header>
 
   <!-- OVERVIEW -->
-  <div class="overview-block fi fi-2">
+  <section id="overview" class="overview-block fi fi-2">
     <div class="overview-stripe"></div>
     <div class="overview-content">
-      <p>Project Cerberus is my <strong>enterprise-style homelab</strong>, built to strengthen hands-on skills across infrastructure, networking, virtualisation and cybersecurity. The goal is to create an environment that feels as close to real-world IT as possible ,a place to build, test, troubleshoot and document systems properly.</p>
+      <p>Project Cerberus is my <strong>enterprise-style homelab</strong>, built to strengthen hands-on skills across infrastructure, networking, virtualisation and cybersecurity. The goal is to create an environment that feels as close to real-world IT as possible, a place to build, test, troubleshoot and document systems properly.</p>
       <p>This is not just hardware sitting on a rack. <strong>Each phase is tracked and documented</strong> through Notion, including implementation steps, issues encountered, troubleshooting, fixes applied and lessons learned along the way.</p>
     </div>
+  </section>
+
+  <!-- HARDWARE -->
+  <div id="hardware"></div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar fi fi-3">
+    <span class="filter-label">Filter //</span>
+    <button class="filter-btn active" onclick="filterCards('all', this)">All</button>
+    <button class="filter-btn f-green" onclick="filterCards('active', this)">● Active</button>
+    <button class="filter-btn f-amber" onclick="filterCards('offline', this)">○ Offline</button>
+    <button class="filter-btn f-blue"  onclick="filterCards('planned', this)">◈ Planned</button>
   </div>
 
-  <!-- ACTIVE -->
-  <div class="sec-head fi fi-3">
+  <!-- ACTIVE SECTION -->
+  <div class="sec-head fi fi-3" data-section="active">
     <div class="sec-pip pip-g"></div>
     <div class="sec-label sl-g">Active Hardware</div>
     <div class="sec-rule sr-g"></div>
     <div class="sec-count">05 UNITS</div>
   </div>
 
-  <div class="card-grid">
-    <div class="card cg">
+  <div class="card-grid" id="cards-active">
+
+    <div class="card cg" data-status="active">
       <div class="glow-bar"></div>
-      <div class="ch">
+      <div class="card-trigger" onclick="toggleCard(this)">
         <div class="ch-icon">🖥️</div>
-        <div class="ch-text"><div class="ch-name">Dell PowerEdge R620</div><div class="ch-code">// "DEKU" // COMPUTE NODE //</div></div>
-        <div class="ch-badge badge-active">● Active</div>
-      </div>
-      <div class="cb-inner">
-        <div class="cb-role">Virtualisation Host / Lab Compute Node</div>
-        <p class="cb-desc">Forms part of the main compute layer in the lab ,used for virtualisation, infrastructure services and general hands-on server administration. Provides a solid enterprise platform for building and managing virtual machines, testing server roles and running supporting lab workloads.</p>
-        <div class="tags-label">// Primary Use Cases</div>
-        <div class="tags">
-          <span class="tag">Hosting VMs</span><span class="tag">Infrastructure Services</span>
-          <span class="tag">Server Workload Testing</span><span class="tag">Sysadmin Skills</span><span class="tag">Core Lab Services</span>
+        <div class="ch-text">
+          <div class="ch-name">Dell PowerEdge R620</div>
+          <div class="ch-code">// "DEKU" // COMPUTE NODE //</div>
         </div>
-        <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">Core part of the compute layer. Used to support realistic infrastructure testing and service deployment.</div></div>
+        <div class="ch-right">
+          <div class="ch-badge badge-active">● Active</div>
+          <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+        </div>
+      </div>
+      <div class="expand-hint">// click to expand</div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <div class="cb-role">Virtualisation Host / Lab Compute Node</div>
+          <p class="cb-desc">Forms part of the main compute layer in the lab, used for virtualisation, infrastructure services and general hands-on server administration. Provides a solid enterprise platform for building and managing virtual machines, testing server roles and running supporting lab workloads.</p>
+          <div class="tags-label">// Primary Use Cases</div>
+          <div class="tags">
+            <span class="tag">Hosting VMs</span><span class="tag">Infrastructure Services</span>
+            <span class="tag">Server Workload Testing</span><span class="tag">Sysadmin Skills</span><span class="tag">Core Lab Services</span>
+          </div>
+          <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">Core part of the compute layer. Used to support realistic infrastructure testing and service deployment.</div></div>
+        </div>
       </div>
     </div>
 
-    <div class="card cg">
+    <div class="card cg" data-status="active">
       <div class="glow-bar"></div>
-      <div class="ch">
+      <div class="card-trigger" onclick="toggleCard(this)">
         <div class="ch-icon">🖥️</div>
-        <div class="ch-text"><div class="ch-name">HPE ProLiant DL380 Gen9</div><div class="ch-code">// "HYRULE" // ENTERPRISE HOST //</div></div>
-        <div class="ch-badge badge-active">● Active</div>
-      </div>
-      <div class="cb-inner">
-        <div class="cb-role">Main Enterprise Workload Host / Future FC Storage Platform</div>
-        <p class="cb-desc">One of the key servers in the lab ,a major platform for virtualisation and enterprise-style workload hosting. Plays an important future role in the storage side of the environment, planned for direct Fibre Channel connectivity to the HPE MSA 2040 when that phase is implemented.</p>
-        <div class="tags-label">// Primary Use Cases</div>
-        <div class="tags">
-          <span class="tag">Core Virtual Workloads</span><span class="tag">Infrastructure Services</span>
-          <span class="tag">Enterprise Platform</span><span class="tag">Future FC Storage</span>
+        <div class="ch-text">
+          <div class="ch-name">HPE ProLiant DL380 Gen9</div>
+          <div class="ch-code">// "HYRULE" // ENTERPRISE HOST //</div>
         </div>
-        <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">Central to future storage expansion plans. Important part of the long-term infrastructure design.</div></div>
+        <div class="ch-right">
+          <div class="ch-badge badge-active">● Active</div>
+          <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+        </div>
+      </div>
+      <div class="expand-hint">// click to expand</div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <div class="cb-role">Main Enterprise Workload Host / Future FC Storage Platform</div>
+          <p class="cb-desc">One of the key servers in the lab, a major platform for virtualisation and enterprise-style workload hosting. Plays an important future role in the storage side of the environment, planned for direct Fibre Channel connectivity to the HPE MSA 2040 when that phase is implemented.</p>
+          <div class="tags-label">// Primary Use Cases</div>
+          <div class="tags">
+            <span class="tag">Core Virtual Workloads</span><span class="tag">Infrastructure Services</span>
+            <span class="tag">Enterprise Platform</span><span class="tag">Future FC Storage</span>
+          </div>
+          <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">Central to future storage expansion plans. Important part of the long-term infrastructure design.</div></div>
+        </div>
       </div>
     </div>
 
-    <div class="card cg">
+    <div class="card cg" data-status="active">
       <div class="glow-bar"></div>
-      <div class="ch">
+      <div class="card-trigger" onclick="toggleCard(this)">
         <div class="ch-icon">🌐</div>
-        <div class="ch-text"><div class="ch-name">Cisco Catalyst 2960X 48-Port</div><div class="ch-code">// LAYER 2 ACCESS SWITCH //</div></div>
-        <div class="ch-badge badge-active">● Active</div>
-      </div>
-      <div class="cb-inner">
-        <div class="cb-role">Layer 2 Access Switching / Current Network Backbone</div>
-        <p class="cb-desc">Provides the main switching function within the lab, supporting network connectivity across the entire environment. Used for VLAN-based switching, device connectivity and general network structure while the wider routing and segmentation design continues to evolve.</p>
-        <div class="tags-label">// Primary Use Cases</div>
-        <div class="tags">
-          <span class="tag">Layer 2 Switching</span><span class="tag">VLAN Connectivity</span>
-          <span class="tag">Access Layer</span><span class="tag">Device Distribution</span>
+        <div class="ch-text">
+          <div class="ch-name">Cisco Catalyst 2960X 48-Port</div>
+          <div class="ch-code">// LAYER 2 ACCESS SWITCH //</div>
         </div>
-        <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">Current main switch in active use. Supports existing network design while L3 plans are being developed.</div></div>
+        <div class="ch-right">
+          <div class="ch-badge badge-active">● Active</div>
+          <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+        </div>
+      </div>
+      <div class="expand-hint">// click to expand</div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <div class="cb-role">Layer 2 Access Switching / Current Network Backbone</div>
+          <p class="cb-desc">Provides the main switching function within the lab, supporting network connectivity across the entire environment. Used for VLAN-based switching, device connectivity and general network structure while the wider routing and segmentation design continues to evolve.</p>
+          <div class="tags-label">// Primary Use Cases</div>
+          <div class="tags">
+            <span class="tag">Layer 2 Switching</span><span class="tag">VLAN Connectivity</span>
+            <span class="tag">Access Layer</span><span class="tag">Device Distribution</span>
+          </div>
+          <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">Current main switch in active use. Supports existing network design while L3 plans are being developed.</div></div>
+        </div>
       </div>
     </div>
 
-    <div class="card cg">
+    <div class="card cg" data-status="active">
       <div class="glow-bar"></div>
-      <div class="ch">
+      <div class="card-trigger" onclick="toggleCard(this)">
         <div class="ch-icon">🔥</div>
-        <div class="ch-text"><div class="ch-name">FortiGate 300D</div><div class="ch-code">// PERIMETER FIREWALL //</div></div>
-        <div class="ch-badge badge-active">● Active</div>
-      </div>
-      <div class="cb-inner">
-        <div class="cb-role">Firewall / Perimeter Security / Access Control</div>
-        <p class="cb-desc">The main firewall platform in the lab ,lines up strongly with the Cerberus theme of controlled access and defensive design. Supports traffic filtering, policy control and secure access while giving hands-on exposure to enterprise firewall administration and segmented network security.</p>
-        <div class="tags-label">// Primary Use Cases</div>
-        <div class="tags">
-          <span class="tag">Perimeter Security</span><span class="tag">Traffic Filtering</span>
-          <span class="tag">Policy Control</span><span class="tag">VLAN-Aware Access</span><span class="tag">Secure Remote Access</span>
+        <div class="ch-text">
+          <div class="ch-name">FortiGate 300D</div>
+          <div class="ch-code">// PERIMETER FIREWALL //</div>
         </div>
-        <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">Core security component. Replaced the MikroTik hEX S as the active edge security platform.</div></div>
+        <div class="ch-right">
+          <div class="ch-badge badge-active">● Active</div>
+          <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+        </div>
+      </div>
+      <div class="expand-hint">// click to expand</div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <div class="cb-role">Firewall / Perimeter Security / Access Control</div>
+          <p class="cb-desc">The main firewall platform in the lab, lines up strongly with the Cerberus theme of controlled access and defensive design. Supports traffic filtering, policy control and secure access while giving hands-on exposure to enterprise firewall administration and segmented network security.</p>
+          <div class="tags-label">// Primary Use Cases</div>
+          <div class="tags">
+            <span class="tag">Perimeter Security</span><span class="tag">Traffic Filtering</span>
+            <span class="tag">Policy Control</span><span class="tag">VLAN-Aware Access</span><span class="tag">Secure Remote Access</span>
+          </div>
+          <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">Core security component. Replaced the MikroTik hEX S as the active edge security platform.</div></div>
+        </div>
       </div>
     </div>
 
-    <div class="card cg">
+    <div class="card cg" data-status="active">
       <div class="glow-bar"></div>
-      <div class="ch">
+      <div class="card-trigger" onclick="toggleCard(this)">
         <div class="ch-icon">🗄️</div>
-        <div class="ch-text"><div class="ch-name">12U Open Air Rack</div><div class="ch-code">// PHYSICAL INFRASTRUCTURE //</div></div>
-        <div class="ch-badge badge-active">● Active</div>
-      </div>
-      <div class="cb-inner">
-        <div class="cb-role">Physical Infrastructure Housing</div>
-        <p class="cb-desc">Forms the physical base of the homelab and provides a structured way to mount and organise core equipment. Makes the setup more manageable, easier to document and closer in feel to a proper infrastructure deployment rather than disconnected standalone hardware.</p>
-        <div class="tags-label">// Primary Use Cases</div>
-        <div class="tags">
-          <span class="tag">Hardware Housing</span><span class="tag">Physical Organisation</span>
-          <span class="tag">Cable Management</span><span class="tag">Lab Presentation</span>
+        <div class="ch-text">
+          <div class="ch-name">12U Open Air Rack</div>
+          <div class="ch-code">// PHYSICAL INFRASTRUCTURE //</div>
         </div>
-        <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">Open air rack. Forms the physical backbone of the active setup.</div></div>
+        <div class="ch-right">
+          <div class="ch-badge badge-active">● Active</div>
+          <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+        </div>
+      </div>
+      <div class="expand-hint">// click to expand</div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <div class="cb-role">Physical Infrastructure Housing</div>
+          <p class="cb-desc">Forms the physical base of the homelab and provides a structured way to mount and organise core equipment. Makes the setup more manageable, easier to document and closer in feel to a proper infrastructure deployment.</p>
+          <div class="tags-label">// Primary Use Cases</div>
+          <div class="tags">
+            <span class="tag">Hardware Housing</span><span class="tag">Physical Organisation</span>
+            <span class="tag">Cable Management</span><span class="tag">Lab Presentation</span>
+          </div>
+          <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">Open air rack. Forms the physical backbone of the active setup.</div></div>
+        </div>
       </div>
     </div>
+
   </div>
 
-  <!-- INACTIVE -->
-  <div class="sec-head fi fi-4">
+  <!-- INACTIVE SECTION -->
+  <div class="sec-head fi fi-4" data-section="offline">
     <div class="sec-pip pip-a"></div>
     <div class="sec-label sl-a">Inactive / Previously Used</div>
     <div class="sec-rule sr-a"></div>
@@ -614,28 +759,37 @@ body {
   </div>
 
   <div class="card-grid">
-    <div class="card ca">
+    <div class="card ca" data-status="offline">
       <div class="glow-bar"></div>
-      <div class="ch">
+      <div class="card-trigger" onclick="toggleCard(this)">
         <div class="ch-icon">📡</div>
-        <div class="ch-text"><div class="ch-name">MikroTik hEX S</div><div class="ch-code">// PREVIOUS EDGE ROUTER //</div></div>
-        <div class="ch-badge badge-offline">○ Offline</div>
-      </div>
-      <div class="cb-inner">
-        <div class="cb-role">Previous Edge Router / Routing Platform</div>
-        <p class="cb-desc">Used as the initial edge router in the lab before the FortiGate 300D was implemented. Provided the original routing and edge-network function during the earlier stages of the homelab build ,useful for testing routing concepts, connectivity and general network design.</p>
-        <div class="tags-label">// Previous Use Cases</div>
-        <div class="tags">
-          <span class="tag">Initial Edge Routing</span><span class="tag">Connectivity Testing</span>
-          <span class="tag">WAN-Style Config</span><span class="tag">Early Lab Network Design</span>
+        <div class="ch-text">
+          <div class="ch-name">MikroTik hEX S</div>
+          <div class="ch-code">// PREVIOUS EDGE ROUTER //</div>
         </div>
-        <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">Currently offline. Migrated to FortiGate 300D. Retained as part of project history and design evolution.</div></div>
+        <div class="ch-right">
+          <div class="ch-badge badge-offline">○ Offline</div>
+          <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+        </div>
+      </div>
+      <div class="expand-hint">// click to expand</div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <div class="cb-role">Previous Edge Router / Routing Platform</div>
+          <p class="cb-desc">Used as the initial edge router in the lab before the FortiGate 300D was implemented. Provided the original routing and edge-network function during the earlier stages of the homelab build, useful for testing routing concepts, connectivity and general network design.</p>
+          <div class="tags-label">// Previous Use Cases</div>
+          <div class="tags">
+            <span class="tag">Initial Edge Routing</span><span class="tag">Connectivity Testing</span>
+            <span class="tag">WAN-Style Config</span><span class="tag">Early Lab Network Design</span>
+          </div>
+          <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">Currently offline. Migrated to FortiGate 300D. Retained as part of project history and design evolution.</div></div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- PLANNED -->
-  <div class="sec-head fi fi-5">
+  <!-- PLANNED SECTION -->
+  <div class="sec-head fi fi-5" data-section="planned">
     <div class="sec-pip pip-b"></div>
     <div class="sec-label sl-b">Planned / Implementation Phase</div>
     <div class="sec-rule sr-b"></div>
@@ -643,46 +797,67 @@ body {
   </div>
 
   <div class="card-grid">
-    <div class="card cb">
+
+    <div class="card cb" data-status="planned">
       <div class="glow-bar"></div>
-      <div class="ch">
+      <div class="card-trigger" onclick="toggleCard(this)">
         <div class="ch-icon">💾</div>
-        <div class="ch-text"><div class="ch-name">HPE MSA 2040</div><div class="ch-code">// SHARED STORAGE PLATFORM //</div></div>
-        <div class="ch-badge badge-planned">◈ Planned</div>
-      </div>
-      <div class="cb-inner">
-        <div class="cb-role">Shared Storage Platform / Future Implementation</div>
-        <p class="cb-desc">Part of the next planned phase of Project Cerberus, intended to bring shared storage into the lab environment. Planned for Fibre Channel connectivity directly to the HPE DL380 Gen9, moving the lab closer to a realistic enterprise storage and virtualisation model.</p>
-        <div class="tags-label">// Planned Use Cases</div>
-        <div class="tags">
-          <span class="tag">Shared VM Storage</span><span class="tag">Centralised Storage</span>
-          <span class="tag">SAN-Style Learning</span><span class="tag">Advanced Infra Design</span>
+        <div class="ch-text">
+          <div class="ch-name">HPE MSA 2040</div>
+          <div class="ch-code">// SHARED STORAGE PLATFORM //</div>
         </div>
-        <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">In planning phase. Connects via Fibre Channel to DL380 Gen9. Not yet part of the active setup.</div></div>
+        <div class="ch-right">
+          <div class="ch-badge badge-planned">◈ Planned</div>
+          <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+        </div>
+      </div>
+      <div class="expand-hint">// click to expand</div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <div class="cb-role">Shared Storage Platform / Future Implementation</div>
+          <p class="cb-desc">Part of the next planned phase of Project Cerberus, intended to bring shared storage into the lab environment. Planned for Fibre Channel connectivity directly to the HPE DL380 Gen9, moving the lab closer to a realistic enterprise storage and virtualisation model.</p>
+          <div class="tags-label">// Planned Use Cases</div>
+          <div class="tags">
+            <span class="tag">Shared VM Storage</span><span class="tag">Centralised Storage</span>
+            <span class="tag">SAN-Style Learning</span><span class="tag">Advanced Infra Design</span>
+          </div>
+          <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">In planning phase. Connects via Fibre Channel to DL380 Gen9. Not yet part of the active setup.</div></div>
+        </div>
       </div>
     </div>
 
-    <div class="card cb">
+    <div class="card cb" data-status="planned">
       <div class="glow-bar"></div>
-      <div class="ch">
+      <div class="card-trigger" onclick="toggleCard(this)">
         <div class="ch-icon">🌍</div>
-        <div class="ch-text"><div class="ch-name">Cisco Catalyst 3650 48P PoE+</div><div class="ch-code">// FUTURE L3 SWITCH //</div></div>
-        <div class="ch-badge badge-planned">◈ Planned</div>
-      </div>
-      <div class="cb-inner">
-        <div class="cb-role">Future Layer 3 Switching / Inter-VLAN Routing Platform</div>
-        <p class="cb-desc">Planned as the future upgrade path for the network design ,migration from the current Layer 2 switching model to a dedicated Layer 3 approach. Will support inter-VLAN routing at the switch layer and create a more enterprise-style network structure without relying on the firewall for all routing decisions.</p>
-        <div class="tags-label">// Planned Use Cases</div>
-        <div class="tags">
-          <span class="tag">Layer 3 Switching</span><span class="tag">Inter-VLAN Routing</span>
-          <span class="tag">Internal Traffic Handling</span><span class="tag">Network Segmentation</span><span class="tag">Enterprise Architecture</span>
+        <div class="ch-text">
+          <div class="ch-name">Cisco Catalyst 3650 48P PoE+</div>
+          <div class="ch-code">// FUTURE L3 SWITCH //</div>
         </div>
-        <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">In planning phase. Intended move from L2 to dedicated L3 switching for stronger segmentation and performance.</div></div>
+        <div class="ch-right">
+          <div class="ch-badge badge-planned">◈ Planned</div>
+          <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div>
+        </div>
+      </div>
+      <div class="expand-hint">// click to expand</div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <div class="cb-role">Future Layer 3 Switching / Inter-VLAN Routing Platform</div>
+          <p class="cb-desc">Planned as the future upgrade path for the network design, migration from the current Layer 2 switching model to a dedicated Layer 3 approach. Will support inter-VLAN routing at the switch layer and create a more enterprise-style network structure without relying on the firewall for all routing decisions.</p>
+          <div class="tags-label">// Planned Use Cases</div>
+          <div class="tags">
+            <span class="tag">Layer 3 Switching</span><span class="tag">Inter-VLAN Routing</span>
+            <span class="tag">Internal Traffic Handling</span><span class="tag">Network Segmentation</span><span class="tag">Enterprise Architecture</span>
+          </div>
+          <div class="notes-strip"><div class="notes-icon">NOTE//</div><div class="notes-text">In planning phase. Intended move from L2 to dedicated L3 switching for stronger segmentation and performance.</div></div>
+        </div>
       </div>
     </div>
+
   </div>
 
   <!-- DOCUMENTATION -->
+  <div id="docs"></div>
   <div class="sec-head fi fi-6">
     <div class="sec-pip pip-g"></div>
     <div class="sec-label sl-g">Documentation &amp; Project Tracking</div>
@@ -709,6 +884,7 @@ body {
   </div>
 
   <!-- SKILLS -->
+  <div id="skills"></div>
   <div class="sec-head fi fi-7">
     <div class="sec-pip pip-g"></div>
     <div class="sec-label sl-g">Core Skills Developed</div>
@@ -725,51 +901,195 @@ body {
   </div>
 
   <!-- ROADMAP -->
+  <div id="roadmap"></div>
   <div class="sec-head fi fi-8">
     <div class="sec-pip pip-b"></div>
-    <div class="sec-label sl-b">Future Improvements Roadmap</div>
+    <div class="sec-label sl-b">Implementation Roadmap</div>
     <div class="sec-rule sr-b"></div>
   </div>
 
   <div class="roadmap fi fi-8">
+
     <div class="rm-item">
       <div class="rm-num">01</div>
       <div class="rm-spine"><div class="rm-dot"></div><div class="rm-line"></div></div>
-      <div class="rm-content"><div class="rm-title">Implement HPE MSA 2040 shared storage via Fibre Channel to DL380 Gen9</div></div>
+      <div class="rm-content">
+        <div class="rm-title">Network and infrastructure foundations ,VLANs, FortiGate, Cisco, Proxmox, storage</div>
+        <div class="rm-bar-wrap"><div class="rm-bar complete" style="width:100%"></div></div>
+        <span class="rm-status-tag tag-complete">✓ Complete</span>
+      </div>
     </div>
+
     <div class="rm-item">
       <div class="rm-num">02</div>
       <div class="rm-spine"><div class="rm-dot"></div><div class="rm-line"></div></div>
-      <div class="rm-content"><div class="rm-title">Migrate to dedicated L3 switching architecture with Cisco Catalyst 3650</div></div>
+      <div class="rm-content">
+        <div class="rm-title">Internal DNS, reverse proxy and wildcard certificate</div>
+        <div class="rm-bar-wrap"><div class="rm-bar complete" style="width:100%"></div></div>
+        <span class="rm-status-tag tag-complete">✓ Complete</span>
+      </div>
     </div>
+
     <div class="rm-item">
       <div class="rm-num">03</div>
       <div class="rm-spine"><div class="rm-dot"></div><div class="rm-line"></div></div>
-      <div class="rm-content"><div class="rm-title">Expand virtual workloads and service hosting across the compute layer</div></div>
+      <div class="rm-content">
+        <div class="rm-title">WireGuard VPN ,remote access through double-NAT environment</div>
+        <div class="rm-bar-wrap"><div class="rm-bar complete" style="width:100%"></div></div>
+        <span class="rm-status-tag tag-complete">✓ Complete</span>
+      </div>
     </div>
+
     <div class="rm-item">
       <div class="rm-num">04</div>
       <div class="rm-spine"><div class="rm-dot"></div><div class="rm-line"></div></div>
-      <div class="rm-content"><div class="rm-title">Refine VLAN design and network segmentation strategy</div></div>
+      <div class="rm-content">
+        <div class="rm-title">Snipe-IT replatform ,Docker host migration with ISO 27001-aligned design</div>
+        <div class="rm-bar-wrap"><div class="rm-bar complete" style="width:100%"></div></div>
+        <span class="rm-status-tag tag-complete">✓ Complete</span>
+      </div>
     </div>
+
     <div class="rm-item">
       <div class="rm-num">05</div>
       <div class="rm-spine"><div class="rm-dot"></div><div class="rm-line"></div></div>
-      <div class="rm-content"><div class="rm-title">Add monitoring, logging and security visibility tooling (SIEM, IDS, NetFlow)</div></div>
+      <div class="rm-content">
+        <div class="rm-title">Wazuh SIEM ,deployment and endpoint telemetry</div>
+        <div class="rm-bar-wrap"><div class="rm-bar complete" style="width:100%"></div></div>
+        <span class="rm-status-tag tag-complete">✓ Complete</span>
+      </div>
     </div>
+
     <div class="rm-item">
       <div class="rm-num">06</div>
       <div class="rm-spine"><div class="rm-dot"></div><div class="rm-line"></div></div>
-      <div class="rm-content"><div class="rm-title">Improve documentation depth with network diagrams, rack photos and project timelines</div></div>
+      <div class="rm-content">
+        <div class="rm-title">Wazuh SOC pipeline ,Shuffle orchestration and DFIR-IRIS incident handling</div>
+        <div class="rm-bar-wrap"><div class="rm-bar progress" style="width:35%"></div></div>
+        <span class="rm-status-tag tag-progress">↳ In Progress</span>
+      </div>
     </div>
+
+    <div class="rm-item">
+      <div class="rm-num">07</div>
+      <div class="rm-spine"><div class="rm-dot"></div><div class="rm-line"></div></div>
+      <div class="rm-content">
+        <div class="rm-title">Windows enterprise lab ,Active Directory, DNS, GPO, PKI, file services</div>
+        <div class="rm-bar-wrap"><div class="rm-bar planned" style="width:5%"></div></div>
+        <span class="rm-status-tag tag-planned">⏭ Planned</span>
+      </div>
+    </div>
+
+    <div class="rm-item">
+      <div class="rm-num">08</div>
+      <div class="rm-spine"><div class="rm-dot"></div><div class="rm-line"></div></div>
+      <div class="rm-content">
+        <div class="rm-title">Purple team range ,isolated attack and defence VLANs with Kali and Wazuh detection tuning</div>
+        <div class="rm-bar-wrap"><div class="rm-bar planned" style="width:5%"></div></div>
+        <span class="rm-status-tag tag-planned">⏭ Planned</span>
+      </div>
+    </div>
+
+    <div class="rm-item">
+      <div class="rm-num">09</div>
+      <div class="rm-spine"><div class="rm-dot"></div><div class="rm-line"></div></div>
+      <div class="rm-content">
+        <div class="rm-title">Docker and Kubernetes / k3s ,containerisation and cloud-native learning</div>
+        <div class="rm-bar-wrap"><div class="rm-bar planned" style="width:5%"></div></div>
+        <span class="rm-status-tag tag-planned">⏭ Planned</span>
+      </div>
+    </div>
+
+    <div class="rm-item">
+      <div class="rm-num">10</div>
+      <div class="rm-spine"><div class="rm-dot"></div><div class="rm-line"></div></div>
+      <div class="rm-content">
+        <div class="rm-title">Azure, Entra ID, Intune and hybrid cloud integration</div>
+        <div class="rm-bar-wrap"><div class="rm-bar planned" style="width:5%"></div></div>
+        <span class="rm-status-tag tag-planned">⏭ Planned</span>
+      </div>
+    </div>
+
+    <div class="rm-item">
+      <div class="rm-num">11</div>
+      <div class="rm-spine"><div class="rm-dot"></div><div class="rm-line"></div></div>
+      <div class="rm-content">
+        <div class="rm-title">HPE MSA 2040 shared storage via Fibre Channel to DL380 Gen9</div>
+        <div class="rm-bar-wrap"><div class="rm-bar planned" style="width:5%"></div></div>
+        <span class="rm-status-tag tag-planned">⏭ Planned</span>
+      </div>
+    </div>
+
   </div>
 
   <!-- FOOTER -->
   <footer class="footer fi fi-8">
     <div class="footer-logo">⬡ Cerberus</div>
-    <div class="footer-meta">HARDWARE &amp; INFRASTRUCTURE REGISTRY<br>PROJECT PHASE // v1.0 // ACTIVE</div>
+    <div class="footer-links">
+      <a class="footer-link" href="https://github.com/jburke-labs" target="_blank">GitHub</a>
+      <a class="footer-link" href="https://www.linkedin.com/in/jason-burke-822000142" target="_blank">LinkedIn</a>
+      <a class="footer-link" href="https://dent-trampoline-c53.notion.site/Project-Cerberus-Public-Portfolio-351fe4fa7fd3816384c5d06cabbc1a9d" target="_blank">Notion Docs</a>
+    </div>
+    <div class="footer-meta">HARDWARE &amp; INFRASTRUCTURE REGISTRY<br>PROJECT PHASE // v2.0 // ACTIVE</div>
   </footer>
 
 </div>
+
+<script>
+// ── CARD TOGGLE ──
+function toggleCard(trigger) {
+  const card = trigger.closest('.card');
+  const isExpanded = card.classList.contains('expanded');
+  card.classList.toggle('expanded', !isExpanded);
+}
+
+// ── FILTER ──
+function filterCards(status, btn) {
+  // Update button states
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const allCards = document.querySelectorAll('.card');
+  const allSections = document.querySelectorAll('[data-section]');
+
+  allCards.forEach(card => {
+    if (status === 'all') {
+      card.classList.remove('hidden');
+    } else {
+      const match = card.dataset.status === status;
+      card.classList.toggle('hidden', !match);
+    }
+  });
+
+  // Show/hide section headers
+  allSections.forEach(sec => {
+    if (status === 'all') {
+      sec.style.display = '';
+    } else {
+      sec.style.display = sec.dataset.section === status ? '' : 'none';
+    }
+  });
+}
+
+// ── SMOOTH SCROLL ──
+function scrollTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── ANIMATE BARS ON SCROLL ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.animationPlayState = 'running';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.rm-bar').forEach(bar => {
+  bar.style.animationPlayState = 'paused';
+  observer.observe(bar);
+});
+</script>
 </body>
 </html>
