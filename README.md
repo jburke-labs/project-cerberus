@@ -184,7 +184,7 @@ Proxmox Backup            Trunk / access ports      Structured troubleshooting
 
 - 💼 [LinkedIn](https://www.linkedin.com/in/jason-burke-822000142)
 - 🌐 [Live Infrastructure Page](https://jburke-labs.github.io/project-cerberus)
-- 📓 [Notion Documentation](https://www.notion.so/a83fe4fa7fd3833dab2a015171d94ea5)
+- 📓 [Notion Documentation](https://dent-trampoline-c53.notion.site/Project-Cerberus-Public-Portfolio-351fe4fa7fd3816384c5d06cabbc1a9d)
 
 ---
 
