@@ -150,7 +150,7 @@ Every project in this lab has a matching write-up in Notion covering the full co
 
 The GitHub repositories give you the summary. The Notion workspace gives you the depth.
 
-📓 **[Project Cerberus — Notion Workspace](https://www.notion.so/a83fe4fa7fd3833dab2a015171d94ea5)**
+📓 **[Project Cerberus — Notion Workspace](https://dent-trampoline-c53.notion.site/Project-Cerberus-Public-Portfolio-351fe4fa7fd3816384c5d06cabbc1a9d?source=copy_link)**
 
 Notion documentation includes:
 
