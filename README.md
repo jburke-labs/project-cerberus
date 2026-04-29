@@ -6,7 +6,7 @@
 
 [![Live Infrastructure Page](https://img.shields.io/badge/Live%20Page-Project%20Cerberus-00e5ff?style=flat-square)](https://jburke-labs.github.io/project-cerberus)
 [![Status](https://img.shields.io/badge/Status-Active%20Build-00ff88?style=flat-square)](#roadmap)
-[![Docs](https://img.shields.io/badge/Full%20Docs-Notion-ffffff?style=flat-square)](https://www.notion.so/a83fe4fa7fd3833dab2a015171d94ea5)
+[![Docs](https://img.shields.io/badge/Full%20Docs-Notion-ffffff?style=flat-square)](https://dent-trampoline-c53.notion.site/Project-Cerberus-Public-Portfolio-351fe4fa7fd3816384c5d06cabbc1a9d)
 
 ---
 
